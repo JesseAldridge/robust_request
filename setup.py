@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0.4'
+version = '0.0.5'
 
 setup(name='robust_request',
       version=version,
@@ -17,6 +17,6 @@ setup(name='robust_request',
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-          # -*- Extra requirements: -*-
+        "requests"
       ]
       )
