@@ -39,11 +39,11 @@ class Requester:
         requests.exceptions.TooManyRedirects,
         requests.exceptions.SSLError,
       ) as e:
-        self.logger.error("e: ", e)
-        self.logger.error("type: ", type(e))
-        self.logger.error("args: ", e.args)
+        self.logger.error(f"e: {e}")
+        self.logger.error(f"type: {type(e)}")
+        self.logger.error(f"args: {e.args}")
         if hasattr(e, 'errno'):
-          self.logger.error("Index error({0}): {1}".format(e.errno, e.strerror))
+          self.logger.error(f"Index error({e.errno}): {e.strerror}")
         self.logger.debug(f'connection error, trying again, attempt_count: {attempt_count}')
         time.sleep(attempt_count)
 
