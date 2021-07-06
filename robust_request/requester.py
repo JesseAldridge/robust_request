@@ -27,7 +27,7 @@ class Requester:
         self.logger.error('failed too many times, giving up')
         raise
 
-  def get(self, *a, **kw):
+  def get(self, *a, timeout=5, **kw):
     for attempt_count in range(5):
       try:
         return self.session.get(*a, **kw)
