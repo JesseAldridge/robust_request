@@ -28,6 +28,7 @@ class Requester:
         raise
 
   def get(self, *a, timeout=5, **kw):
+    kw['timeout'] = timeout
     for attempt_count in range(5):
       try:
         return self.session.get(*a, **kw)
