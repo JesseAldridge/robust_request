@@ -28,15 +28,22 @@ class Requester:
         self.logger.error('failed too many times, giving up')
         raise
 
-  def get(self, url, *a, timeout=5, **kw):
-    if self.base_url:
-      url = os.path.join(self.base_url, url)
-    print('url:', url)
+  def get(self, *a, **kw):
+    return self.make_request('get', *a, **kw)
 
-    kw['timeout'] = timeout
+  def post(self, *a, **kw):
+    return self.make_request('post', *a, **kw)
+
+  def make_request(self, http_method, url, *a, **kw):
+    if self.base_url:
+      url = '/'.join((self.base_url.strip('/'), url.strip('/')))
+
+    if 'timeout' not in kw:
+      kw['timeout'] = 5
+
     for attempt_count in range(5):
       try:
-        return self.session.get(url, *a, **kw)
+        return getattr(self.session, http_method)(url, *a, **kw)
       except(
         requests.exceptions.ChunkedEncodingError,
         requests.exceptions.ConnectionError,
@@ -53,7 +60,6 @@ class Requester:
         self.logger.debug(f'connection error, trying again, attempt_count: {attempt_count}')
         time.sleep(attempt_count)
 
-
 def test():
   url = 'https://jsonplaceholder.typicode.com/todos/1'
   requester = Requester(logger=logging.getLogger())
@@ -62,6 +68,11 @@ def test():
 
   requester.base_url = 'https://jsonplaceholder.typicode.com'
   resp_dict = requester.json('todos/1')
+  print('resp_dict:', resp_dict)
+
+  resp_dict = requester.post('posts').json()
+  print('resp_dict:', resp_dict)
+  resp_dict = requester.post('/posts', data={'foo': 1}).json()
   print('resp_dict:', resp_dict)
 
 if __name__ == '__main__':
