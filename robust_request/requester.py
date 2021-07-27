@@ -1,4 +1,4 @@
-import logging, time, json
+import logging, time, json, os
 
 import requests
 
@@ -15,6 +15,7 @@ class Requester:
 
     self.logger = logger
     self.failure_count = 0
+    self.base_url = None
 
   def json(self, url):
     try:
@@ -27,11 +28,15 @@ class Requester:
         self.logger.error('failed too many times, giving up')
         raise
 
-  def get(self, *a, timeout=5, **kw):
+  def get(self, url, *a, timeout=5, **kw):
+    if self.base_url:
+      url = os.path.join(self.base_url, url)
+    print('url:', url)
+
     kw['timeout'] = timeout
     for attempt_count in range(5):
       try:
-        return self.session.get(*a, **kw)
+        return self.session.get(url, *a, **kw)
       except(
         requests.exceptions.ChunkedEncodingError,
         requests.exceptions.ConnectionError,
@@ -53,6 +58,10 @@ def test():
   url = 'https://jsonplaceholder.typicode.com/todos/1'
   requester = Requester(logger=logging.getLogger())
   resp_dict = requester.json(url)
+  print('resp_dict:', resp_dict)
+
+  requester.base_url = 'https://jsonplaceholder.typicode.com'
+  resp_dict = requester.json('todos/1')
   print('resp_dict:', resp_dict)
 
 if __name__ == '__main__':
