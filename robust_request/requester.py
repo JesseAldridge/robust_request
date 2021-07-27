@@ -80,5 +80,8 @@ def test():
   resp_dict = requester.post('/posts', {'bar': 1}).json()
   print('resp_dict:', resp_dict)
 
+  resp_dict = requester.delete('/posts/1')
+  print('resp_dict:', resp_dict)
+
 if __name__ == '__main__':
   test()
