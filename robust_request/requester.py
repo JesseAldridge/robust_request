@@ -34,6 +34,9 @@ class Requester:
   def post(self, url, *a, **kw):
     return self.make_request('post', url, *a, **kw)
 
+  def delete(self, url, *a, **kw):
+    return self.make_request('delete', url, *a, **kw)
+
   def make_request(self, http_method, url, *a, **kw):
     if self.base_url:
       url = '/'.join((self.base_url.strip('/'), url.strip('/')))
