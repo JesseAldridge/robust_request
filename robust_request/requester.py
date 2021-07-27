@@ -31,8 +31,7 @@ class Requester:
   def get(self, *a, **kw):
     return self.make_request('get', *a, **kw)
 
-  def post(self, url, data=None, *a, **kw):
-    kw['data'] = data
+  def post(self, url, *a, **kw):
     return self.make_request('post', url, *a, **kw)
 
   def make_request(self, http_method, url, *a, **kw):
