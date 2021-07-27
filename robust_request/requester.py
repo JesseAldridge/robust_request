@@ -31,8 +31,9 @@ class Requester:
   def get(self, *a, **kw):
     return self.make_request('get', *a, **kw)
 
-  def post(self, *a, **kw):
-    return self.make_request('post', *a, **kw)
+  def post(self, url, data=None, *a, **kw):
+    kw['data'] = data
+    return self.make_request('post', url, *a, **kw)
 
   def make_request(self, http_method, url, *a, **kw):
     if self.base_url:
@@ -73,6 +74,8 @@ def test():
   resp_dict = requester.post('posts').json()
   print('resp_dict:', resp_dict)
   resp_dict = requester.post('/posts', data={'foo': 1}).json()
+  print('resp_dict:', resp_dict)
+  resp_dict = requester.post('/posts', {'bar': 1}).json()
   print('resp_dict:', resp_dict)
 
 if __name__ == '__main__':
