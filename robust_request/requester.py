@@ -19,7 +19,8 @@ class Requester:
 
   def json(self, url):
     try:
-      return self.get(url).json()
+      resp = self.get(url)
+      return resp.json() if resp else None
     except json.decoder.JSONDecodeError:
       return None
     except:
